@@ -1,0 +1,69 @@
+# CMakeList.txt: baidulac 的 CMake 项目，在此处包括源代码并定义
+# 项目特定的逻辑。
+#
+cmake_minimum_required (VERSION 3.5)
+
+if(MSVC)     
+    # Use the static C library for all build types
+    foreach(var 
+        CMAKE_C_FLAGS CMAKE_C_FLAGS_DEBUG CMAKE_C_FLAGS_RELEASE
+        CMAKE_C_FLAGS_MINSIZEREL CMAKE_C_FLAGS_RELWITHDEBINFO
+        CMAKE_CXX_FLAGS CMAKE_CXX_FLAGS_DEBUG CMAKE_CXX_FLAGS_RELEASE
+        CMAKE_CXX_FLAGS_MINSIZEREL CMAKE_CXX_FLAGS_RELWITHDEBINFO
+      )
+      if(${var} MATCHES "/MD")
+        # 正则表达式替换/MD为/MT
+        string(REGEX REPLACE "/MD" "/MT" ${var} "${${var}}")
+      endif()
+    endforeach()    
+endif(MSVC)
+
+#set(JAVA_HOME "D:/Program Files/Java/jdk1.8.0_171/")
+set(JAVA_HOME "/usr/lib/jvm/java-8-oracle")
+
+set(PADDLE_ROOT "/home/zhouzusheng/paddle_install")
+get_filename_component(PADDLE_ABS_PATH ${PADDLE_ROOT}/ ABSOLUTE)
+
+message(${PADDLE_ABS_PATH}/paddle/lib)
+
+set(CMAKE_CXX_FLAGS "-O3 -g -pipe -W -Wall -Wno-unused-parameter -fPIC -fpermissive -std=gnu++11")
+set (openblas_inc_path ${PADDLE_ABS_PATH}/third_party/install/openblas/include)
+set (openblas_lib_path ${PADDLE_ABS_PATH}/third_party/install/openblas/lib)
+
+if (EXISTS ${openblas_inc_path} AND EXISTS ${openblas_lib_path})
+    message(STATUS "openblas lib found.")   
+    include_directories(${PADDLE_ABS_PATH}/third_party/install/openblas/include)
+    link_directories(${PADDLE_ABS_PATH}/third_party/install/openblas/lib)
+    link_libraries(openblas)
+else ()
+    message(STATUS "openblas lib not found.")
+endif()
+
+link_directories(${PADDLE_ABS_PATH}/third_party/install/protobuf/lib)
+#link_libraries("protobuf")
+
+link_directories(${PADDLE_ABS_PATH}/third_party/install/glog/lib)
+#link_libraries("glog")
+
+link_directories(${PADDLE_ABS_PATH}/third_party/install/gflags/lib)
+#link_libraries("gflags")
+
+link_directories(${PADDLE_ABS_PATH}/third_party/install/xxhash/lib)
+#link_libraries("xxhash")
+
+if(MSVC)   
+link_libraries("Shlwapi")
+endif(MSVC)
+
+link_libraries(dl pthread)
+
+# 将源代码添加到此项目的可执行文件。
+include_directories(. ${PADDLE_ABS_PATH}/paddle/include ${JAVA_HOME}/include ${JAVA_HOME}/include/linux/ ${JAVA_HOME}/include/darwin ${JAVA_HOME}/include/win32)
+link_directories(${PADDLE_ABS_PATH}/paddle/lib)
+link_libraries(paddle_fluid)
+
+aux_source_directory(. SOURCE)
+
+add_library (baidulac SHARED ${SOURCE})
+set_target_properties(baidulac PROPERTIES INSTALL_RPATH_USE_LINK_PATH TRUE)
+
