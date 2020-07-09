@@ -1,7 +1,7 @@
 # CMakeList.txt: baidulac 的 CMake 项目，在此处包括源代码并定义
 # 项目特定的逻辑。
 #
-cmake_minimum_required (VERSION 3.5)
+cmake_minimum_required (VERSION 3.8)
 
 if(MSVC)     
     # Use the static C library for all build types
@@ -18,15 +18,13 @@ if(MSVC)
     endforeach()    
 endif(MSVC)
 
-#set(JAVA_HOME "D:/Program Files/Java/jdk1.8.0_171/")
-set(JAVA_HOME "/usr/lib/jvm/java-8-oracle")
+set(JAVA_HOME "D:/Program Files/Java/jdk1.8.0_171/")
 
-set(PADDLE_ROOT "/home/zhouzusheng/paddle_install")
+set(PADDLE_ROOT "./fluid_inference/")
 get_filename_component(PADDLE_ABS_PATH ${PADDLE_ROOT}/ ABSOLUTE)
 
 message(${PADDLE_ABS_PATH}/paddle/lib)
 
-set(CMAKE_CXX_FLAGS "-O3 -g -pipe -W -Wall -Wno-unused-parameter -fPIC -fpermissive -std=gnu++11")
 set (openblas_inc_path ${PADDLE_ABS_PATH}/third_party/install/openblas/include)
 set (openblas_lib_path ${PADDLE_ABS_PATH}/third_party/install/openblas/lib)
 
@@ -40,30 +38,30 @@ else ()
 endif()
 
 link_directories(${PADDLE_ABS_PATH}/third_party/install/protobuf/lib)
-#link_libraries("protobuf")
+link_libraries("libprotobuf")
 
 link_directories(${PADDLE_ABS_PATH}/third_party/install/glog/lib)
-#link_libraries("glog")
+link_libraries("glog")
 
 link_directories(${PADDLE_ABS_PATH}/third_party/install/gflags/lib)
-#link_libraries("gflags")
+link_libraries("gflags_static")
 
 link_directories(${PADDLE_ABS_PATH}/third_party/install/xxhash/lib)
-#link_libraries("xxhash")
+link_libraries("xxhash")
 
 if(MSVC)   
 link_libraries("Shlwapi")
 endif(MSVC)
 
-link_libraries(dl pthread)
-
 # 将源代码添加到此项目的可执行文件。
 include_directories(. ${PADDLE_ABS_PATH}/paddle/include ${JAVA_HOME}/include ${JAVA_HOME}/include/linux/ ${JAVA_HOME}/include/darwin ${JAVA_HOME}/include/win32)
 link_directories(${PADDLE_ABS_PATH}/paddle/lib)
-link_libraries(paddle_fluid)
+link_libraries(libpaddle_fluid)
 
 aux_source_directory(. SOURCE)
 
 add_library (baidulac SHARED ${SOURCE})
 set_target_properties(baidulac PROPERTIES INSTALL_RPATH_USE_LINK_PATH TRUE)
+
+
 
