@@ -20,6 +20,9 @@ endif(MSVC)
 
 set(JAVA_HOME "D:/Program Files/Java/jdk1.8.0_171/")
 
+#linux gcc need
+#set(CMAKE_CXX_FLAGS "-O3 -g -pipe -W -Wall -Wno-unused-parameter -fPIC -fpermissive -std=gnu++11")
+
 set(PADDLE_ROOT "./fluid_inference/")
 get_filename_component(PADDLE_ABS_PATH ${PADDLE_ROOT}/ ABSOLUTE)
 
