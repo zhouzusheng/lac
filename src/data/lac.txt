@@ -1,0 +1,23 @@
+下周三/TIME 下午/TIME 两点/TIME
+下周三/TIME 两点/TIME
+下下周/TIME
+大前天/TIME
+大后天/TIME
+下个周一/TIME
+下个周二/TIME
+下个周三/TIME
+下个周四/TIME
+下个周五/TIME
+下个周六/TIME
+下个周日/TIME
+下个礼拜天/TIME
+下下周一/TIME
+下下周二/TIME
+下下周三/TIME
+下下周四/TIME
+下下周五/TIME
+下下周六/TIME
+下下周日/TIME
+我/r 给/p 你/r 提/v 两点/m 建议/n
+两点/m 意见/n
+我们/r 约/d 在/p 两点后/TIME 见面/v
